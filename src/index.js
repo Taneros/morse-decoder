@@ -41,37 +41,57 @@ function decode(expr) {
 	// write your solution here
 	console.log('expression', expr)
 	const onlyNumsArr = expr.split(/\*{10}/)
-	console.log('OnlyNumbersArr', onlyNumsArr)
+	// console.log('OnlyNumbersArr', onlyNumsArr)
 
 
 	const morzeWordArr = onlyNumsArr.map(element => {
 
-		console.log('onlyNumArr element', element)
+		// console.log('onlyNumArr element', element)
 
 		let morzeLetterArr = []
 
 		for (tenNumsChunk of element.match(/.{1,10}/gm)) {
 			let str = ''
-			console.log('tenNumsChunk', tenNumsChunk)
+			// console.log('tenNumsChunk', tenNumsChunk)
 			// remove padding zeros ->  convert 10 and 11 to '.' and '-'  -> put into a new aray
 			for (doubleNum of tenNumsChunk.replace(/(00){1,}/gm, '').match(/.{1,2}/gm)) {
-				console.log('doubleNum', doubleNum)
+				// console.log('doubleNum', doubleNum)
 				if (doubleNum === '10') { str += (doubleNum.replace(/10/gm, '.')) }
 				if (doubleNum === '11') { str += (doubleNum.replace(/11/gm, '-')) }
 			}
-			console.log('str', str)
+			// console.log('str', str)
 			morzeLetterArr.push(str)
 		}
 		return morzeLetterArr
 	})
-	return console.log('morzeWordArr', morzeWordArr)
+
+	// iterate through the morze dictionary and replace morzeLetters
+
+	const letterArr = morzeWordArr.map(elemArr => {
+
+		for (morzeLetter of elemArr) {
+			// console.log('morzeLetter in element', morzeLetter)
+			let index = elemArr.indexOf(morzeLetter)
+			elemArr[index] = MORSE_TABLE[morzeLetter]
+			// console.log('elementArr[i]', elemArr[index])
+		}
+		return elemArr
+	})
+
+	// compress letters to words inside arr
+	const wordsArr = letterArr.map(element => {
+		let str = element.join('')
+		return str
+	})
+
+	return wordsArr.join(' ')
 }
 
 module.exports = {
 	decode
 }
 
-console.log(decode('00101010100000000010001011101000101110100000111111**********00001011110000111111000010111000101110100000111010'))
+// console.log(decode('00101010100000000010001011101000101110100000111111**********00001011110000111111000010111000101110100000111010'))
 
 
 /**
